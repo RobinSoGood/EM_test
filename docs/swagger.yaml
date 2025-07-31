@@ -1,0 +1,77 @@
+basePath: /api/v1
+definitions:
+  models.SumRequest:
+    properties:
+      end:
+        type: string
+      service_name:
+        type: string
+      start:
+        type: string
+      user_id:
+        type: integer
+    type: object
+host: localhost:8081
+info:
+  contact: {}
+  title: Subscription API With Swagger
+  version: "1.0"
+paths:
+  /subs/{id}:
+    delete:
+      description: Mark subscription as deleted (soft delete)
+      parameters:
+      - description: Subscription ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Sub {id} was deleted
+          schema:
+            type: string
+        "204":
+          description: Subscription not found
+          schema:
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            type: object
+      summary: Delete subscription
+      tags:
+      - subscriptions
+  /subs/total:
+    post:
+      consumes:
+      - application/json
+      description: Calculate total price for subscriptions in given period
+      parameters:
+      - description: Period and filter criteria
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.SumRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Total price calculation result
+          schema:
+            type: object
+        "400":
+          description: Invalid date format or period
+          schema:
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            type: object
+      summary: Calculate total price
+      tags:
+      - subscriptions
+swagger: "2.0"
